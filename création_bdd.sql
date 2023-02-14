@@ -11,7 +11,7 @@ DROP TABLE if exists TYPE_OPERATION;
 --   Table :TYPE_COMPTE                                       
 -- ============================================================
 create table TYPE_COMPTE
-(   LIBELLE_CPT varchar(30),   
+(   LIBELLE_CPT varchar(30)not null check (LIBELLE_CPT<>''),   
     CODE_TYPE_CPT   VARCHAR(3),
     primary key(CODE_TYPE_CPT)
 );
@@ -22,9 +22,9 @@ create table TYPE_COMPTE
 create table COMPTE
 (  NUMERO_CPT varchar(10),
    DATE_OUVERTURE_CPT date,
-   CODE_TYPE_CPT VARCHAR(3),
-   SOLDE_CPT decimal(7,2),
-   NUM_TIT varchar(5),
+   CODE_TYPE_CPT VARCHAR(3)not null,
+   SOLDE_CPT decimal(7,2)default 0,
+   NUM_TIT varchar(5)not null,
    primary key(NUMERO_CPT)
 );
    
@@ -33,7 +33,7 @@ create table COMPTE
 -- ============================================================
 create table TITULAIRE
 (  NUM_TIT varchar(5),
-   NOM_TIT varchar(40),
+   NOM_TIT varchar(40)not null check (NOM_TIT<>''),
    ADRESSE_TIT varchar(60),
    primary key (NUM_TIT)
 );
@@ -44,7 +44,7 @@ create table TITULAIRE
 create table OPERATION
 (  NUM_OP int,
    DATE_OP datetime,
-   MONTANT_OP decimal(7,2),
+   MONTANT_OP decimal(7,2)check (LIBELLE_TYPE_OP <> 0),
    NUMERO_CPT varchar(10),
    CODE_TYPE_OP varchar(3),
    primary key(NUM_OP)
@@ -55,7 +55,7 @@ create table OPERATION
 --   Table :TYPE_OPERATION                                       
 -- ============================================================
 create table TYPE_OPERATION
-(  LIBELLE_TYPE_OP varchar(30),
+(  LIBELLE_TYPE_OP varchar(30)not null check (LIBELLE_TYPE_OP<>''),
    CODE_TYPE_OP varchar(3),
    primary key(CODE_TYPE_OP)
 );
