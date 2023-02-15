@@ -1,74 +1,63 @@
-CREATE DATABASE IF NOT EXISTS BANQUE; 
+-- 
+-- BANQUE - Création des tables de la base de données
+-- 
+
+-- création Bdd
+CREATE DATABASE IF NOT EXISTS BANQUE;
+
+-- sélection de la Bdd BANQUE pour travailler dessus
 USE BANQUE;
 
-DROP TABLE if exists TYPE_COMPTE;
-DROP TABLE if exists COMPTE;
-DROP TABLE if exists TITULAIRE;
-DROP TABLE if exists OPERATION;
-DROP TABLE if exists TYPE_OPERATION;
+-- supression de toutes les tables
+DROP table IF EXISTS TYPECPT CASCADE;
+DROP table IF EXISTS COMPTE CASCADE;
+DROP table IF EXISTS TITULAIRE CASCADE;
+DROP table IF EXISTS TYPEOPERATION CASCADE;
+DROP table IF EXISTS OPERATION CASCADE;
 
--- ============================================================
---   Table :TYPE_COMPTE                                       
--- ============================================================
-create table TYPE_COMPTE
-(   LIBELLE_CPT varchar(30)not null check (LIBELLE_CPT<>''),   
-    CODE_TYPE_CPT   VARCHAR(3),
-    primary key(CODE_TYPE_CPT)
-);
-    
--- ============================================================
---   Table :COMPTE                                       
--- ============================================================
-create table COMPTE
-(  NUMERO_CPT varchar(10),
-   DATE_OUVERTURE_CPT date,
-   CODE_TYPE_CPT VARCHAR(3)not null,
-   SOLDE_CPT decimal(7,2)default 0,
-   NUM_TIT varchar(5)not null,
-   primary key(NUMERO_CPT)
-);
-   
--- ============================================================
---   Table :TITULAIRE                                       
--- ============================================================
-create table TITULAIRE
-(  NUM_TIT varchar(5),
-   NOM_TIT varchar(40)not null check (NOM_TIT<>''),
-   ADRESSE_TIT varchar(60),
-   primary key (NUM_TIT)
+CREATE table TYPECPT (
+	codeTypeCpt Char(3),
+	libelleTypeCpt varchar(30) not null CHECK (libelleTypeCpt <> ''),
+	primary key (codeTypeCpt)
 );
 
--- ============================================================
---   Table :OPERATION                                       
--- ============================================================
-create table OPERATION
-(  NUM_OP int,
-   DATE_OP datetime,
-   MONTANT_OP decimal(7,2)check (LIBELLE_TYPE_OP <> 0),
-   NUMERO_CPT varchar(10),
-   CODE_TYPE_OP varchar(3),
-   primary key(NUM_OP)
-   
+CREATE table COMPTE (
+	numCpt Char(10),
+	dateOuvCpt Date default sysdate(),
+	numTit Char(5) not null,
+	codeTypeCpt Char(3) not null,
+	soldeCpt Decimal(7,2) default 0,	
+	primary key (numCpt)
 );
 
--- ============================================================
---   Table :TYPE_OPERATION                                       
--- ============================================================
-create table TYPE_OPERATION
-(  LIBELLE_TYPE_OP varchar(30)not null check (LIBELLE_TYPE_OP<>''),
-   CODE_TYPE_OP varchar(3),
-   primary key(CODE_TYPE_OP)
+CREATE table TITULAIRE (
+	numTit Char(5),
+	nomTit varchar(40) not null CHECK (nomTit <> ''),
+	adrTit varchar(60),
+	primary key (numTit)
 );
 
+CREATE table TYPEOPERATION (
+	codeTypeOpe Char(3),
+	libelleTypeOpe varchar(30) not null CHECK (libelleTypeOpe <> ''),
+	primary key (codeTypeOpe)
+);
 
-alter table COMPTE
-add constraint CODE_TYPE_CPT  foreign key(CODE_TYPE_CPT) references TYPE_COMPTE(CODE_TYPE_CPT);
+CREATE table OPERATION (
+	numOpe Serial, -- numero incrémenté et affecté automatiquement
+	dateOpe Datetime default sysdate(),
+	montantOpe Decimal(7,2) CHECK (montantOpe <> 0),	
+	numCpt Char(10),
+	codeTypeOpe Char(3),
+	primary key (numOpe)
+);
 
-alter table COMPTE
-add constraint NUM_TIT  foreign key(NUM_TIT) references TITULAIRE(NUM_TIT);
+-- création des contraintes de clés étrangères :
+ALTER table COMPTE ADD constraint COMPTE_numTit_FK foreign key(numTit) references TITULAIRE(numtit);
+ALTER table COMPTE ADD constraint COMPTE_codeTypeCpt_FK foreign key(codeTypeCpt) references TYPECPT(codeTypeCpt);
 
-alter table OPERATION
-add constraint CODE_TYPE_OP  foreign key(CODE_TYPE_OP) references TYPE_OPERATION(CODE_TYPE_OP);
+ALTER table OPERATION ADD constraint OPERATION_numCpt_FK foreign key(numCpt) references COMPTE(numCpt);
+ALTER table OPERATION ADD constraint OPERATION_codeTypeOpe_FK foreign key(codeTypeOpe) references TYPEOPERATION(codeTypeOpe);
 
-alter table OPERATION
-add constraint NUMERO_CPT  foreign key(NUMERO_CPT) references COMPTE(NUMERO_CPT);
+
+
