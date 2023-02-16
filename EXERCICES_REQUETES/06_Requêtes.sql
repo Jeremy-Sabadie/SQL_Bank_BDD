@@ -44,29 +44,43 @@ SET COMPTE.dateOuvCpt = (SELECT MIN(dateOpe) FROM OPERATION WHERE OPERATION.numC
 UPDATE OPERATION
 SET montantOpe = montantOpe * -1
 WHERE codeTypeOpe = 'DEP';
+--=====================================================================================================
 
 
 -- Calculer et affecter à chaque compte son solde 
+UPDATE COMPTE
+SET soldeCpt= 
+(SELECT 
+SUM(montantOpe)
+FROM OPERATION  
+WHERE COMPTE.numCpt=OPERATION.numCpt);
+--=====================================================================================================
 
 
 -- Quel compte a le plus grand nombre d'opérations
+--=====================================================================================================
 
 
 -- Afficher le solde de tous les comptes au 31/01/2021
+--=====================================================================================================
 
 
 -- Afficher tous les mouvements entre le 01/03/2020 et le 30/06/2020
+--=====================================================================================================
 
 
 -- Quel(s) client(s) ont le plus gros solde au 31/01/2021
+--=====================================================================================================
 
 
 -- Enregistrer un dépôt de 1000 sur le compte courant du titulaire n° '00001'
+--=====================================================================================================
 
 -- Enregistrer un virement de 333 du compte CO00000008 vers le compte CO00000002
+--=====================================================================================================
 
 -- Le client 00002 quite la banque, il vient fermer tous ses comptes. il faut donc le supprimer de notre Bdd lui et tous ses comptes
-
+--=====================================================================================================
 
 
 
