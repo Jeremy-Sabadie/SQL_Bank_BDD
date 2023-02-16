@@ -58,6 +58,25 @@ WHERE COMPTE.numCpt=OPERATION.numCpt);
 
 
 -- Quel compte a le plus grand nombre d'opérations
+SELECT
+	numCpt,
+	count(*)
+FROM
+	OPERATION
+GROUP BY
+	numCpt
+HAVING
+	count(*)=
+(
+	SELECT
+		count (*)
+	FROM
+		OPERATION
+	GROUP BY
+		numCpt
+	ORDER BY
+		count(*) DESC
+	LIMIT 1);
 --=====================================================================================================
 
 
