@@ -8,9 +8,11 @@ WHERE OPERATION.numCpt = 'LI00000003';
 
 
 -- opération la plus vielle pour le compte 'CC00000001'
+--=====================================================================================================
 SELECT MIN(dateOpe)
 FROM OPERATION
 WHERE OPERATION.numCpt = 'CC00000001';
+--=====================================================================================================
 
 UPDATE COMPTE
 SET COMPTE.dateOuvCpt = (
@@ -19,6 +21,7 @@ SET COMPTE.dateOuvCpt = (
 							WHERE OPERATION.numCpt = 'CC00000001'
 						)
 WHERE COMPTE.numCpt = 'CC00000001';
+--=====================================================================================================
 
 
 
@@ -58,40 +61,44 @@ WHERE COMPTE.numCpt=OPERATION.numCpt);
 
 
 -- Quel compte a le plus grand nombre d'opérations
-SELECT
-	numCpt,
-	count(*)
-FROM
-	OPERATION
-GROUP BY
-	numCpt
-HAVING
-	count(*)=
-(
-	SELECT
-		count (*)
-	FROM
-		OPERATION
-	GROUP BY
-		numCpt
-	ORDER BY
-		count(*) DESC
+SELECT numCpt,count(*)
+FROM OPERATION
+GROUP BY numCpt
+HAVINGcount(*)=
+(SELECT count (*)
+FROM OPERATION
+GROUP BY numCpt
+ORDER BY count(*) DESC
 	LIMIT 1);
 --=====================================================================================================
 
 
 -- Afficher le solde de tous les comptes au 31/01/2021
+SELECT numCpt ,SUM(montantOpe), '31-01-2021' ,'2021-01-31'
+FROM OPERATION 
+GROUP BY numCpt; 
 --=====================================================================================================
 
 
 -- Afficher tous les mouvements entre le 01/03/2020 et le 30/06/2020
+SELECT *
+FROM OPERATION
+WHERE dateOpe BETWEEN '2020-03-01' AND '2020-06-30'
+ORDER BY dateOpe;
 --=====================================================================================================
 
 
 -- Quel(s) client(s) ont le plus gros solde au 31/01/2021
-SELECT numCpt ,SUM(montantOpe), '31-01-2021' ,'2021-01-31'
-FROM OPERATION 
-GROUP BY numCpt; 
+SELECT TITULAIRE.numTit , TITULAIRE.nomTit , SUM(montantOpe)
+FROM OPERATION
+INNER JOIN COMPTE ON OPERATION.numCpt = COMPTE.numCpt
+INNER JOIN TITULAIRE ON COMPTE.numTit = TITULAIRE.numTit
+WHERE dateOpe < '2021-02-01'
+GROUP BY TITULAIRE.numTit , TITULAIRE.nomTit
+ORDER BY SUM(montantOpe) DESC
+LIMIT 1;
+
+
 --=====================================================================================================
 
 
