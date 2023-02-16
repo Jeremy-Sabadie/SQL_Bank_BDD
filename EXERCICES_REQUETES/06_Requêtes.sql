@@ -70,6 +70,9 @@ WHERE COMPTE.numCpt=OPERATION.numCpt);
 
 
 -- Quel(s) client(s) ont le plus gros solde au 31/01/2021
+SELECT numCpt ,SUM(montantOpe), '31-01-2021' ,'2021-01-31'
+FROM OPERATION 
+GROUP BY numCpt; 
 --=====================================================================================================
 
 
