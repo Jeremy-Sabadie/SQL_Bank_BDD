@@ -143,6 +143,40 @@ COMMIT;
 --=====================================================================================================
 
 -- Le client 00002 quite la banque, il vient fermer tous ses comptes. il faut donc le supprimer de notre Bdd lui et tous ses comptes
+-- comptes du client 00002
+SELECT numCpt 
+FROM COMPTE
+WHERE numTit = '00002';
+
+
+-- on doit supprimer en tenant compte des dépendances donc l'ordre sera : OPERATION, COMPTE, TITULAIRE
+
+START TRANSACTION; 
+
+CREATE TEMPORARY TABLE IF NOT EXISTS TempTableNumCPT002 AS (
+															SELECT numCpt 
+															FROM COMPTE
+															WHERE numTit = '00002'
+);
+
+-- Suppression des opérations des comptes du client 00002
+DELETE 
+FROM OPERATION
+WHERE numCpt IN (SELECT numCPT FROM TempTableNumCPT002);
+
+-- Suppression des comptes du client 00002
+DELETE
+FROM COMPTE
+WHERE numTit = '00002';
+
+-- Suppression du client 00002
+DELETE
+FROM TITULAIRE 
+WHERE numTit = '00002';
+
+DROP TABLE TempTableNumCPT002;
+
+COMMIT;
 --=====================================================================================================
 
 
