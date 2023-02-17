@@ -103,6 +103,27 @@ LIMIT 1;
 
 
 -- Enregistrer un dépôt de 1000 sur le compte courant du titulaire n° '00001'
+-- 	* recherche du compte courant du titulaire 00001
+	SELECT * 
+	FROM COMPTE
+	WHERE numTit = '00001' AND codeTypeCpt = 'COC';
+
+-- * enregistrement du dépot : opération de dépôt sur le compte
+	
+-- IL n'est pas autorisé par MYSQL dans une requête de lire une table qui sera modifiée par le trigger
+-- On a donc dû utiliser une table temporaire pour stocker le résultat à utiliser
+
+	CREATE TEMPORARY TABLE IF NOT EXISTS TempTableNumCPT AS (SELECT numCpt FROM COMPTE WHERE numTit = '00001' AND codeTypeCpt = 'COC');
+	
+    SELECT * FROM 	TempTableNumCPT;
+
+	INSERT
+	INTO OPERATION
+	(description, montantOpe , numCpt, codeTypeOpe)
+	VALUES ('Dépôt 1000€ sur le comte', 1000, (SELECT numCpt FROM TempTableNumCPT), 'DEP')
+	;
+
+	DROP TABLE TempTableNumCPT;
 --=====================================================================================================
 
 -- Enregistrer un virement de 333 du compte CO00000008 vers le compte CO00000002
