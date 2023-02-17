@@ -127,6 +127,19 @@ LIMIT 1;
 --=====================================================================================================
 
 -- Enregistrer un virement de 333 du compte CO00000008 vers le compte CO00000002
+-- on utilise une transaction car on doit faire plusieurs opérations et toutes doivent réussir pour garantir l'intégrité
+SET AUTOCOMMIT = false;
+START TRANSACTION;
+
+-- débit du compte 8
+INSERT INTO OPERATION (description, montantOpe , numCpt, codeTypeOpe)
+	VALUES ('Virement vers CO00000002', -333, 'CO00000008' , 'VIR');
+
+-- crédit du compte 2
+INSERT INTO OPERATION (description, montantOpe , numCpt, codeTypeOpe)
+	VALUES ('Virement en provenance du CO00000008', 333, 'CO00000002' , 'VIR');
+
+COMMIT;
 --=====================================================================================================
 
 -- Le client 00002 quite la banque, il vient fermer tous ses comptes. il faut donc le supprimer de notre Bdd lui et tous ses comptes
