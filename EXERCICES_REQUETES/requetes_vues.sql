@@ -12,7 +12,7 @@ FROM EMP_VU;
 --================================================================================================================================
 
 -- Q2 - En utilisant la vue EMP_VU, créer une requête pour afficher les noms et les numéros de département de tous les employés.
-SELECT ENAME,DEPNO
+SELECT ENAME,DEPTNO
 FROM EMP_VU;
 --=======================================================================================================================
 -- Q3 - Créer une vue DEPT_VU montrant tous les départements avec le numéro de département, le nom du département, le nombre d’employés du département. Afficher le contenu de cette vue.
