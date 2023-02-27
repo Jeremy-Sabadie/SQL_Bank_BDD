@@ -35,4 +35,20 @@ from SALGRADE_VU
 group by GRADE;
 --=======================================================================================================================
 -- Q5 – Créer une vue DEPT20_VU qui contiendra le numéro, le nom et le numéro de département de tous les employés du département 20.Interdire de modifier la colonne numéro de département à partir de cette vue. Afficher le contenu de la vue DEPT20_VU. Tenter de modifier le numéro de département de l‘employé SMITH (nouvelle valeur 30).
+CREATE OR REPLACE VIEW DEPT20_VU AS
+	SELECT EMPNO, ENAME, DEPTNO
+	FROM EMP
+	WHERE DEPTNO = 20;
+
+-- version interdisant de modifier le numéro de département
+CREATE OR REPLACE VIEW DEPT20_VU AS
+	SELECT EMPNO, ENAME, DEPTNO
+	FROM EMP
+	WHERE DEPTNO = 20
+	WITH CHECK OPTION;
+
+SELECT * FROM DEPT20_VU;
+
+UPDATE DEPT20_VU 
+SET DEPTNO = 30;
 --=======================================================================================================================
