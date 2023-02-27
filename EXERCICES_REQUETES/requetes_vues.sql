@@ -1,11 +1,24 @@
 -- OAI – Vues:
 
 -- Q1 - Créer une vue appelée EMP_VU comprenant le numéro d’employé, le nom, le numéro de département de la table EMP. Afficher le contenu de cette vue.
---=======================================================================================================================
+CREATE  OR REPLACE VIEW EMP_VU
+as
+SELECT empno,DEPTNO
+FROM EMP;
+SELECT *
+FROM EMP_VU;
+--================================================================================================================================
 
 -- Q2 - En utilisant la vue EMP_VU, créer une requête pour afficher les noms et les numéros de département de tous les employés.
 --=======================================================================================================================
 -- Q3 - Créer une vue DEPT_VU montrant tous les départements avec le numéro de département, le nom du département, le nombre d’employés du département. Afficher le contenu de cette vue.
+CREATE  OR REPLACE VIEW DEPT_VU
+as
+SELECT d.DNAME,d.DEPTNO, COUNT(*) 
+FROM DEPT d  INNER JOIN EMP e ON d.DEPTNO =e.DEPTNO
+GROUP BY DEPTNO;
+SELECT *
+FROM DEPT_VU; 
 --=======================================================================================================================
 -- Q4 - Créer une vue SALGRADE_VU montrant tous les employés avec leur numéro, leur nom, leur salaire, leur poste et leur grade. En utilisant la vue SALGRADE_VU, compter le nombre d’employés par grade.
 --=======================================================================================================================
