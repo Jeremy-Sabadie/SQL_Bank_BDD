@@ -25,6 +25,14 @@ SELECT *
 FROM DEPT_VU; 
 --=======================================================================================================================
 -- Q4 - Créer une vue SALGRADE_VU montrant tous les employés avec leur numéro, leur nom, leur salaire, leur poste et leur grade. En utilisant la vue SALGRADE_VU, compter le nombre d’employés par grade.
+CREATE or REPLACE VIEW SALGRADE_VU as    
+select EMPNO , ENAME , SAL , JOB , GRADE
+    FROM EMP e
+    JOIN SALGRADE ON e.SAL BETWEEN LOSAL AND HISAL;
+ -- aFFICHAGE:  
+SELECT GRADE, COUNT(EMPNO)
+from SALGRADE_VU
+group by GRADE;
 --=======================================================================================================================
 -- Q5 – Créer une vue DEPT20_VU qui contiendra le numéro, le nom et le numéro de département de tous les employés du département 20.Interdire de modifier la colonne numéro de département à partir de cette vue. Afficher le contenu de la vue DEPT20_VU. Tenter de modifier le numéro de département de l‘employé SMITH (nouvelle valeur 30).
 --=======================================================================================================================
